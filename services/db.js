@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
 function dbConnect({ dbName }) {
-  const dbUri = process.env.NODE_ENV
-    ? dbName
-    : `mongodb+srv://rwuser:${process.env.DBPASSWORD}@cluster0-s5nbo.mongodb.net/test?retryWrites=true&w=majority`;
+  const dbUri =
+    process.env.NODE_ENV === "DEVELOPMENT"
+      ? dbName
+      : `mongodb+srv://rwuser:${process.env.DBPASSWORD}@cluster0-s5nbo.mongodb.net/test?retryWrites=true&w=majority`;
 
   mongoose
     .connect(dbUri)
