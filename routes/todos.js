@@ -14,6 +14,13 @@ router.get("/", authenticate, admin, async (req, res) => {
   res.send(data);
 });
 
+router.get("/me", authenticate, async (req, res) => {
+  const { data, error } = await todoService.getTodosByUser(req.user._id);
+  if (error) return res.status(error.status).send(error.message);
+
+  res.send(data);
+});
+
 router.get("/:_id", authenticate, async (req, res) => {
   const { _id } = req.params;
 
@@ -22,15 +29,6 @@ router.get("/:_id", authenticate, async (req, res) => {
 
   if (data.author !== req.user._id || !req.user.admin)
     return res.status(403).send("Access Forbidden!");
-
-  res.send(data);
-});
-
-router.get("/myTodos/:_id", authenticate, async (req, res) => {
-  const { _id } = req.params;
-
-  const { data, error } = await todoService.getTodo(_id);
-  if (error) return res.status(error.status).send(error.message);
 
   res.send(data);
 });

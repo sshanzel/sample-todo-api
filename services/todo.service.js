@@ -3,7 +3,7 @@ const { validObjectId } = require("../helpers/index");
 
 async function getTodosByUser(_id) {
   if (!validObjectId(_id))
-    return { error: { status: 404, message: "Not found!" } };
+    return { error: { status: 404, message: "Not founda!" } };
 
   const data = await Todo.find({ author: _id });
 

@@ -6,7 +6,7 @@ module.exports = function(req, res, next) {
 
   const decoded = authService.verify(token);
   if (!decoded) return res.status(401).send("Invalid Token!");
-  console.log(decoded);
+
   req.user = decoded;
   next();
 };

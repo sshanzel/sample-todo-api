@@ -10,7 +10,6 @@ const { dbConnect } = require("./services/db");
 dbConnect({ dbName: `mongodb://localhost/todo-app` });
 app.use(express.json());
 app.use("/api/auth", auth);
-// app.use(authMiddleware);
 app.use("/api/todos", todos);
 app.use("/api/users", users);
 
