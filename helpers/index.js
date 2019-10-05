@@ -1,25 +1,28 @@
 const mongoose = require("mongoose");
 
-async function executePostCommand(command, obj, req, res) {
+async function executePost(command, obj) {
   try {
     const result = await command(obj);
-    return res ? res.send(result) : result;
+
+    return { result };
   } catch (err) {
-    const errors = err.errors || err;
-    return res ? res.status(400).send(errors) : errors;
+    const error = err.errors || err;
+
+    return { error: { status: 400, message: error } };
   }
 }
 
-async function executePatchCommand(command, _id, obj, req, res) {
+async function executePatch(command, _id, obj) {
   try {
-    const execute = await command(_id, obj);
-    if (!execute) return res.status(404).send("Not found!");
+    const { result, error } = await command(_id, obj);
+    if (!result || error)
+      return { error: { status: 400, message: "Not Found!" } };
 
-    return res ? res.send(execute.result) : execute.result;
+    return { result };
   } catch (err) {
-    const errors = err.errors || err;
+    const error = err.errors || err;
 
-    return res ? res.status(400).send(errors) : errors;
+    return { error: { status: 400, message: error } };
   }
 }
 
@@ -33,7 +36,7 @@ function validObjectId(_id) {
 }
 
 module.exports = {
-  executePostCommand,
-  executePatchCommand,
+  executePost,
+  executePatch,
   validObjectId
 };

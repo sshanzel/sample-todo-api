@@ -1,81 +1,84 @@
 const Joi = require("@hapi/joi");
-const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
-const {
-  executePostCommand,
-  executePatchCommand,
-  validObjectId
-} = require("../helpers/index");
+const authorize = require("../middlewares/authorize/todo.middleware");
+const admin = require("../middlewares/administrator.middleware");
+const authenticate = require("../middlewares/authenticate.middleware");
+const todoService = require("../services/todo.service");
+const { executePost, executePatch } = require("../helpers/index");
 
-router.get("/", async (req, res) => {
-  if (!req.query._id) return res.send(await Todo.find());
+router.get("/", authenticate, admin, async (req, res) => {
+  const { data, error } = await todoService.getTodos();
+  if (error) return res.status(error.status).send(error.message);
 
-  const { _id } = res.query;
-  if (!validObjectId(_id)) return res.status(404).send("Not found!");
-
-  const { result } = await Todo.find({ author: _id });
-  return result;
+  res.send(data);
 });
 
-router.post("/", async (req, res) => {
+router.get("/:_id", authenticate, async (req, res) => {
+  const { _id } = req.params;
+
+  const { data, error } = await todoService.getTodo(_id);
+  if (error) return res.status(error.status).send(error.message);
+
+  if (data.author !== req.user._id || !req.user.admin)
+    return res.status(403).send("Access Forbidden!");
+
+  res.send(data);
+});
+
+router.get("/myTodos/:_id", authenticate, async (req, res) => {
+  const { _id } = req.params;
+
+  const { data, error } = await todoService.getTodo(_id);
+  if (error) return res.status(error.status).send(error.message);
+
+  res.send(data);
+});
+
+router.post("/", authenticate, async (req, res) => {
+  const { error: vError } = validate(req.body);
+  if (vError) return res.status(400).send(vError.details);
+
+  const todo = { ...req.body, author: req.user._id };
+  const { error, result } = await executePost(todoService.createTodo, todo);
+  if (error) return res.status(400).send(error);
+
+  return res.send(result);
+});
+
+router.patch("/:_id", authenticate, authorize.sender, async (req, res) => {
+  const { _id } = req.params;
   const todo = req.body;
 
-  const { error } = validateTodo(todo);
-  if (error) return res.status(400).send(error.details);
+  const { error: vError } = validate(todo);
+  if (vError) return res.status(400).send(vError.details);
 
-  return await executePostCommand(createTodo, todo, req, res);
+  const { result, error } = await executePatch(
+    todoService.updateTodo,
+    _id,
+    todo
+  );
+
+  if (error) return res.status(error.status).send(error.message);
+
+  res.send(result);
 });
 
-router.patch("/:_id", async (req, res) => {
-  const _id = req.params._id;
-  if (!validObjectId(_id)) return res.status(404).send("Todo not found");
+router.delete("/:_id", authenticate, authorize.sender, async (req, res) => {
+  const { _id } = req.params;
 
-  const { error } = validateTodo(req.body);
+  const { result, error } = await todoService.deleteTodo(_id);
   if (error) return res.status(400).send(error.details);
 
-  return await executePatchCommand(updateTodo, _id, req.body, req, res);
+  res.send(result);
 });
 
-router.delete("/:_id", async (req, res) => {
-  const _id = req.params._id;
-  if (!validObjectId(_id)) return res.status(404).send("Todo not found");
-
-  Todo.findByIdAndDelete(_id, err => {
-    if (err) return res.status(400).send(err);
-
-    res.send("Successfully Deleted");
+function validate(todo) {
+  const schema = Joi.object({
+    title: Joi.string().required()
   });
-});
 
-async function createTodo(newTodo) {
-  const todo = new Todo(newTodo);
-  const { result } = await todo.save();
-
-  return result;
+  return Joi.validate(todo, schema);
 }
-
-async function updateTodo(_id, todo) {
-  const result = await Todo.findOneAndUpdate({ _id: _id }, todo);
-
-  return result;
-}
-
-function validateTodo(todo) {
-  return Joi.validate(todo, todoSchemaValidation);
-}
-
-const todoSchemaValidation = Joi.object({
-  title: Joi.string().required()
-});
-
-const todoSchemaProperties = {
-  title: { type: String, required: true },
-  description: String,
-  owner: { type: mongoose.Types.ObjectId, ref: "Users" }
-};
-
-const todoSchema = new mongoose.Schema(todoSchemaProperties);
-const Todo = mongoose.model("Todos", todoSchema);
 
 module.exports = router;
