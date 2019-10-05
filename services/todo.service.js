@@ -38,7 +38,7 @@ async function updateTodo(_id, todo) {
 
   const result = await Todo.findOneAndUpdate({ _id: _id }, todo, { new: true });
 
-  return result;
+  return { result };
 }
 
 async function deleteTodo(_id) {

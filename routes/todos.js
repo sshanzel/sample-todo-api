@@ -73,7 +73,8 @@ router.delete("/:_id", authenticate, authorize.sender, async (req, res) => {
 
 function validate(todo) {
   const schema = Joi.object({
-    title: Joi.string().required()
+    title: Joi.string().required(),
+    author: Joi.string()
   });
 
   return Joi.validate(todo, schema);
