@@ -13,7 +13,9 @@ async function authenticate({ username, password }) {
   const valid = await hashService.validatePassword(password, user.password);
   if (!valid) return { error: { status: 400, message: invalid } };
 
-  const token = generateToken(user.toObject());
+  const token = generateToken(
+    _.pick(user.toObject(), ["_id", "admin", "username", "name"])
+  );
   return { result: token };
 }
 

@@ -14,13 +14,13 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^15.0.3",
-    "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "mongoose": "^5.7.3",
+    "node-gyp": "^6.0.0",
     "nodemon": "^1.19.3",
     "serverless-http": "^2.3.0",
     "uuid": "^3.3.3"

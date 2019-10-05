@@ -25,7 +25,9 @@ router.post("/", async (req, res) => {
   if (error) return res.status(error.status).send(error.message);
 
   const token = authService.generateToken({ _id: result._id });
-  res.header("x-auth-token", token).send(_.pick(result, ["_id", "username"]));
+  res
+    .header("x-auth-token", token)
+    .send(_.pick(result, ["_id", "admin", "username", "name"]));
 });
 
 function validate(user) {

@@ -13,7 +13,7 @@ app.use("/api/auth", auth);
 app.use("/api/todos", todos);
 app.use("/api/users", users);
 
-const port = process.env.PORT || 3001;
-app.listen(port, () => console.log(`Listening at port ${port}...`));
+// const port = process.env.PORT || 3001;
+// app.listen(port, () => console.log(`Listening at port ${port}...`));
 
-// module.exports.handler = serverless(app);
+module.exports.handler = serverless(app);

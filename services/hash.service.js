@@ -1,15 +1,18 @@
-const bcrypt = require("bcrypt");
-const saltSize = 10;
+// const bcrypt = require("bcrypt");
+// const saltSize = 10;
 
-async function encrypt(string) {
-  const salt = await bcrypt.genSalt(saltSize);
-  const encrypted = await bcrypt.hash(string, salt);
+// "bcrypt" is not working on Lambda. Will soon provide an encryption package
 
-  return encrypted;
+async function encrypt(password) {
+  // const salt = await bcrypt.genSalt(saltSize);
+  // const encrypted = await bcrypt.hash(password, salt);
+
+  return password;
 }
 
-async function validatePassword(request, encrypted) {
-  return await bcrypt.compare(request, encrypted);
+async function validatePassword(password, encrypted) {
+  // return await bcrypt.compare(request, encrypted);
+  return password === encrypted;
 }
 
 module.exports = {
