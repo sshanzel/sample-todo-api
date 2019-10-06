@@ -120,7 +120,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/todo-app/dev/1570287017767-2019-10-05T14:50:17.767Z/todo-app.zip"
+                "S3Key": "serverless/todo-app/dev/1570348936768-2019-10-06T08:02:16.768Z/todo-app.zip"
               },
               "FunctionName": "todo-app-dev-app",
               "Handler": "app/app.handler",
@@ -139,14 +139,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "AppLambdaVersionnBpqYWEQLbYOQ4aKMd1A7k9znGzDeZ3UiDtqMTFmK4": {
+          "AppLambdaVersionG88pmHcD1ThZCwuDSnTTzAgWUXRPDjTlLNejTSb4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AppLambdaFunction"
               },
-              "CodeSha256": "asp9WBC2A3bG0DQIpLAPxM5jugoKKSQVlN3QiWsPAzU="
+              "CodeSha256": "TrpgQ2zuoxbCW6PABNibDlwuZUQxyIw37hzXQcjXZzs="
             }
           },
           "ApiGatewayRestApi": {
@@ -361,7 +361,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1570286877836": {
+          "ApiGatewayDeployment1570348836003": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -423,7 +423,7 @@
           "AppLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AppLambdaVersionnBpqYWEQLbYOQ4aKMd1A7k9znGzDeZ3UiDtqMTFmK4"
+              "Ref": "AppLambdaVersionG88pmHcD1ThZCwuDSnTTzAgWUXRPDjTlLNejTSb4"
             }
           },
           "ServiceEndpoint": {
@@ -551,7 +551,7 @@
     "artifact": "D:\\reax\\todo-api\\.serverless\\todo-app.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/todo-app/dev/1570287017767-2019-10-05T14:50:17.767Z",
+    "artifactDirectoryName": "serverless/todo-app/dev/1570348936768-2019-10-06T08:02:16.768Z",
     "artifact": "todo-app.zip"
   }
 }

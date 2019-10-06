@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const todoSchemaProperties = {
   title: { type: String, required: true },
   description: String,
+  completed: { type: Boolean, default: false },
+  due: { type: Date },
   author: { type: mongoose.Types.ObjectId, ref: "User" }
 };
 

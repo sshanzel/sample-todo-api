@@ -1,5 +1,6 @@
 require("dotenv").config();
 const serverless = require("serverless-http");
+const cors = require("cors");
 const express = require("express");
 const app = express();
 const auth = require("./routes/auth");
@@ -8,6 +9,7 @@ const users = require("./routes/users");
 const { dbConnect } = require("./services/db");
 
 dbConnect({ dbName: `mongodb://localhost/todo-app` });
+app.use(cors());
 app.use(express.json());
 app.use("/api/auth", auth);
 app.use("/api/todos", todos);
