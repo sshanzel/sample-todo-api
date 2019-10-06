@@ -5,7 +5,7 @@ const todoSchemaProperties = {
   description: String,
   completed: { type: Boolean, default: false },
   due: { type: Date },
-  author: { type: mongoose.Types.ObjectId, ref: "User" }
+  author: { type: mongoose.Types.ObjectId, ref: "User", required: true }
 };
 
 const todoSchema = new mongoose.Schema(todoSchemaProperties);

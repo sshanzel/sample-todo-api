@@ -1,7 +1,10 @@
 const authService = require("../services/auth.service");
 
 module.exports = function(req, res, next) {
-  const token = req.get("X-Api-Key");
+  const token =
+    process.env.NODE_ENV === "DEVELOPMENT"
+      ? req.headers["x-api-key"]
+      : req.get("X-Api-Key");
   if (!token) return res.status(401).send("Access denied! No token provided!");
 
   try {

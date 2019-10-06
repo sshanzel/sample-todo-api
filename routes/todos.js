@@ -62,13 +62,13 @@ router.patch("/:_id", authenticate, authorize.sender, async (req, res) => {
   res.send(result);
 });
 
-router.delete("/:_id", authenticate, authorize.sender, async (req, res) => {
+router.delete("/:_id", authenticate, async (req, res) => {
   const { _id } = req.params;
 
   const { result, error } = await todoService.deleteTodo(_id);
   if (error) return res.status(400).send(error.details);
 
-  res.send(result);
+  res.send("Successfully Deleted!");
 });
 
 function validate(todo) {
@@ -76,7 +76,8 @@ function validate(todo) {
     title: Joi.string().required(),
     description: Joi.string().allow(""),
     completed: Joi.bool(),
-    due: Joi.date()
+    due: Joi.date(),
+    author: Joi.any().allow("")
   });
 
   return Joi.validate(todo, schema);

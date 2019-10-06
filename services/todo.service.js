@@ -45,11 +45,9 @@ async function deleteTodo(_id) {
   if (!validObjectId(_id))
     return { error: { status: 404, message: "Not found!" } };
 
-  Todo.findByIdAndDelete(_id, err => {
-    if (err) return { error: { status: 400, message: err } };
+  await Todo.findByIdAndDelete(_id);
 
-    return { result: "Successfully Deleted!" };
-  });
+  return { result: "Successfully Deleted!" };
 }
 
 module.exports = {
