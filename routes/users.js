@@ -27,7 +27,15 @@ router.post("/", async (req, res) => {
   const token = authService.generateToken({ _id: result._id });
   res
     .header("X-Api-Key", token)
-    .send(_.pick(result, ["_id", "admin", "username", "name"]));
+    .send(
+      _.pick({ ...result, token }, [
+        "_id",
+        "admin",
+        "username",
+        "name",
+        "token"
+      ])
+    );
 });
 
 function validate(user) {
